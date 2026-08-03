@@ -1,121 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Animated Snakes - AWS Test Site v3 updated new version , by new branch</title>
-   
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Page</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    background: #f0f2f5;
+    color: #333;
+  }
+  .container {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  h1 { color: #4f46e5; }
+  button {
+    padding: 10px 20px;
+    background: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 15px;
+  }
+  button:hover { background: #4338ca; }
+  #output {
+    margin-top: 15px;
+    font-weight: bold;
+    color: green;
+  }
+</style>
+  
 </head>
-    <body>
-    <!-- Animated snakes background -->
-    <canvas id="snakeCanvas"></canvas>
+<body>
 
-    <!-- Main content -->
-    <div class="container">
-        <div class="glass-card">
-            <h1>🐍 Animated Snakes Background</h1>
-            <p class="subtitle">AWS Test Website - Version 3</p>
-            
-            <div class="content">
-                <div class="info-box">
-                    <h2>✅ Successfully Deployed!</h2>
-                    <p>Your website is live on AWS</p>
-                </div>
+  <div class="container">
+    <h1>✅ Test Page Working!</h1>
+    <p>If you can see this page, your HTML file is loading correctly.</p>
+    <button onclick="testClick()">Click to Test JavaScript</button>
+    <p id="output"></p>
+  </div>
 
-                <div class="stats">
-                    <div class="stat-item">
-                        <span class="stat-icon">🕒</span>
-                        <p id="time">--:--:--</p>
-                        <small>Current Time</small>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-icon">🐍</span>
-                        <p id="snakeCount">5</p>
-                        <small>Active Snakes</small>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-icon">🎨</span>
-                        <p>v3.0</p>
-                        <small>Version</small>
-                    </div>
-                </div>
+<script>
+  function testClick() {
+    document.getElementById('output').textContent = 
+      "🎉 JavaScript is working! Time: " + new Date().toLocaleTimeString();
+  }
+</script>
 
-                <div class="controls">
-                    <button id="addSnake" class="btn btn-primary">Add Snake 🐍</button>
-                    <button id="removeSnake" class="btn btn-secondary">Remove Snake</button>
-                    <button id="toggleSpeed" class="btn btn-accent">Toggle Speed</button>
-                </div>
-
-                <div class="features">
-                    <h3>🎯 Features</h3>
-                    <ul>
-                        <li>✨ Animated background snakes</li>
-                        <li>🎨 Glassmorphism design</li>
-                        <li>📱 Fully responsive</li>
-                        <li>☁️ AWS cloud hosted</li>
-                        <li>🚀 Lightning fast</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="snakes.js"></script>
-    <body>
-    <!-- Animated snakes background -->
-    <canvas id="snakeCanvas"></canvas>
-
-    <!-- Main content -->
-    <div class="container">
-        <div class="glass-card">
-            <h1>🐍 Animated Snakes Background</h1>
-            <p class="subtitle">AWS Test Website - Version 3</p>
-            
-            <div class="content">
-                <div class="info-box">
-                    <h2>✅ Successfully Deployed!</h2>
-                    <p>Your website is live on AWS</p>
-                </div>
-
-                <div class="stats">
-                    <div class="stat-item">
-                        <span class="stat-icon">🕒</span>
-                        <p id="time">--:--:--</p>
-                        <small>Current Time</small>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-icon">🐍</span>
-                        <p id="snakeCount">5</p>
-                        <small>Active Snakes</small>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-icon">🎨</span>
-                        <p>v3.0</p>
-                        <small>Version</small>
-                    </div>
-                </div>
-
-                <div class="controls">
-                    <button id="addSnake" class="btn btn-primary">Add Snake 🐍</button>
-                    <button id="removeSnake" class="btn btn-secondary">Remove Snake</button>
-                    <button id="toggleSpeed" class="btn btn-accent">Toggle Speed</button>
-                </div>
-
-                <div class="features">
-                    <h3>🎯 Features</h3>
-                    <ul>
-                        <li>✨ Animated background snakes</li>
-                        <li>🎨 Glassmorphism design</li>
-                        <li>📱 Fully responsive</li>
-                        <li>☁️ AWS cloud hosted</li>
-                        <li>🚀 Lightning fast</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="snakes.js"></script>
 </body>
 </html>
