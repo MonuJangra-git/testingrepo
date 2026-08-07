@@ -3,14 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Change from git branch new Version 3. </title>
-   
-    <link rel="stylesheet" href="style.css">
+    <title> New Version has been released</title>
+    <style>
+      :root {
+        --bg-1: #0f172a;
+        --bg-2: #111827;
+        --card-bg: #1f2937;
+        --text: #e5e7eb;
+        --muted: #9ca3af;
+        --accent: #14b8a6;
+        --accent-hover: #0d9488;
+        --shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
+        color: var(--text);
+      }
+
+      .container {
+        width: min(680px, 100%);
+        background: var(--card-bg);
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        border-radius: 16px;
+        padding: 28px;
+        box-shadow: var(--shadow);
+        text-align: center;
+      }
+
+      h1 {
+        margin-top: 0;
+        margin-bottom: 12px;
+        font-size: clamp(1.4rem, 2.6vw, 2rem);
+      }
+
+      p {
+        margin: 0 0 14px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      button {
+        border: none;
+        border-radius: 10px;
+        padding: 11px 18px;
+        font-size: 0.98rem;
+        font-weight: 600;
+        color: #ffffff;
+        background: var(--accent);
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+      }
+
+      button:hover {
+        background: var(--accent-hover);
+        transform: translateY(-1px);
+      }
+
+      #output {
+        min-height: 24px;
+        margin-top: 14px;
+        font-weight: 600;
+        color: var(--accent);
+      }
+    </style>
 </head>
 <body>
 
   <div class="container">
-    <h1>✅ Test Page Working!</h1>
+    <h1>✅ New Version is Working!</h1>
     <p>If you can see this page, your HTML file is loading correctly.</p>
     <button onclick="testClick()">Click to Test JavaScript</button>
     <p id="output"></p>
