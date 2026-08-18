@@ -1,0 +1,29 @@
+services:
+  mongo_db:
+    image: mongo:7
+    container_name: mongo_db
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - app-network
+    restart: unless-stopped
+  app:
+    build: .
+    container_name: app_container
+    environment:
+      - PORT=5000
+      - MONGODB_URI=mongodb://mongo_db:27017/ecommerce
+      - JWT_SECRET=3f44e4555f09ecfe79f5d4f7ad6f7f65ef30b2dad19147e90d36e79c8cd9978b53277ef2b404f17b716700abb5e1286e
+    restart: unless-stopped
+    ports:
+      - 5000:5000
+    depends_on:
+      - mongo_db
+    networks:
+      - app-network
+
+
+networks:
+  app-network:
+volumes:
+  mongo-data:
