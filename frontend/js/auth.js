@@ -96,6 +96,32 @@ function hideAlert(alertEl) {
   alertEl.textContent = '';
 }
 
+function setButtonState(button, isBusy, busyText, idleText) {
+  if (!button) return;
+  button.disabled = isBusy;
+  button.textContent = isBusy ? busyText : idleText;
+}
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function initPasswordToggles() {
+  const toggles = document.querySelectorAll('[data-toggle-password]');
+  toggles.forEach((toggle) => {
+    toggle.addEventListener('click', () => {
+      const inputId = toggle.getAttribute('data-toggle-password');
+      const input = inputId ? document.getElementById(inputId) : null;
+      if (!input) return;
+
+      const nextType = input.type === 'password' ? 'text' : 'password';
+      input.type = nextType;
+      toggle.textContent = nextType === 'password' ? 'Show' : 'Hide';
+      toggle.setAttribute('aria-label', nextType === 'password' ? 'Show password' : 'Hide password');
+    });
+  });
+}
+
 /** Wires up the login form, if present on the page. */
 function initLoginForm() {
   const form = document.getElementById('login-form');
@@ -116,16 +142,19 @@ function initLoginForm() {
       return;
     }
 
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Logging in...';
+    if (!isValidEmail(email)) {
+      showAlert(alertEl, 'Please enter a valid email address.');
+      return;
+    }
+
+    setButtonState(submitBtn, true, 'Logging in...', 'Log In');
 
     try {
       await api.post('/auth/login', { email, password });
       window.location.href = 'index.html';
     } catch (err) {
       showAlert(alertEl, err.message || 'Login failed. Please try again.');
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Log In';
+      setButtonState(submitBtn, false, 'Logging in...', 'Log In');
     }
   });
 }
@@ -145,9 +174,21 @@ function initRegisterForm() {
     const username = document.getElementById('username').value.trim();
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
+    const confirmPasswordInput = document.getElementById('confirm-password');
+    const confirmPassword = confirmPasswordInput ? confirmPasswordInput.value : '';
 
     if (!username || !email || !password) {
       showAlert(alertEl, 'Please fill in all fields.');
+      return;
+    }
+
+    if (username.length < 3) {
+      showAlert(alertEl, 'Username must be at least 3 characters long.');
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      showAlert(alertEl, 'Please enter a valid email address.');
       return;
     }
 
@@ -156,22 +197,26 @@ function initRegisterForm() {
       return;
     }
 
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Creating account...';
+    if (confirmPasswordInput && confirmPassword !== password) {
+      showAlert(alertEl, 'Passwords do not match.');
+      return;
+    }
+
+    setButtonState(submitBtn, true, 'Creating account...', 'Create Account');
 
     try {
       await api.post('/auth/register', { username, email, password });
       window.location.href = 'index.html';
     } catch (err) {
       showAlert(alertEl, err.message || 'Registration failed. Please try again.');
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Create Account';
+      setButtonState(submitBtn, false, 'Creating account...', 'Create Account');
     }
   });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   initNavbar();
+  initPasswordToggles();
   initLoginForm();
   initRegisterForm();
 });

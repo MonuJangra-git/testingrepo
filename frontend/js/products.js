@@ -1,9 +1,9 @@
 /**
- * products.js -- fetches and renders the product listing (index.html) and
- * the product detail page (product.html).
+ * products.js -- product listing and detail page logic.
  */
 
 const CATEGORIES = ['Electronics', 'Clothing', 'Home', 'Books', 'Sports', 'Toys'];
+const SORT_OPTIONS = ['relevance', 'price-asc', 'price-desc', 'rating-desc'];
 
 const PRODUCT_IMAGE_FALLBACKS = {
   'Wireless Bluetooth Headphones': 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1200&q=80',
@@ -47,49 +47,7 @@ const CATEGORY_IMAGE_FALLBACKS = {
   Toys: 'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?auto=format&fit=crop&w=1200&q=80'
 };
 
-function getProductImageUrl(product) {
-  const current = (product && product.imageUrl ? String(product.imageUrl) : '').trim();
-  const isLegacyPlaceholder = !current || /picsum\.photos/i.test(current);
-
-  if (!isLegacyPlaceholder) return current;
-  if (product && PRODUCT_IMAGE_FALLBACKS[product.name]) return PRODUCT_IMAGE_FALLBACKS[product.name];
-  if (product && CATEGORY_IMAGE_FALLBACKS[product.category]) return CATEGORY_IMAGE_FALLBACKS[product.category];
-  return 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=1200&q=80';
-}
-
-function truncate(text, maxLength) {
-  if (!text) return '';
-  if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength).trim() + '...';
-}
-
-function formatPrice(price) {
-  return Number(price).toLocaleString('en-IN');
-}
-
-function renderStars(rating) {
-  const rounded = Math.round(rating || 0);
-  const full = '\u2605'.repeat(rounded);
-  const empty = '\u2606'.repeat(5 - rounded);
-  return full + empty;
-}
-
-function productCardTemplate(product) {
-  return `
-    <a class="product-card" href="product.html?id=${encodeURIComponent(product._id)}">
-      <img class="product-card-image" src="${escapeAttr(getProductImageUrl(product))}" alt="${escapeAttr(product.name)}" loading="lazy" />
-      <div class="product-card-body">
-        <span class="product-card-category">${escapeHtml(product.category)}</span>
-        <h3 class="product-card-name">${escapeHtml(product.name)}</h3>
-        <p class="product-card-desc">${escapeHtml(truncate(product.description, 90))}</p>
-        <div class="product-card-footer">
-          <span class="product-price">${formatPrice(product.price)}</span>
-          <span class="rating-badge">${escapeHtml(String(product.rating || 0))} \u2605</span>
-        </div>
-      </div>
-    </a>
-  `;
-}
+let listingRequestId = 0;
 
 function escapeHtml(str) {
   const div = document.createElement('div');
@@ -101,7 +59,58 @@ function escapeAttr(str) {
   return escapeHtml(str);
 }
 
-/** Populates the category <select> dropdown once, if present on the page. */
+function truncate(text, maxLength) {
+  if (!text) return '';
+  if (text.length <= maxLength) return text;
+  return `${text.slice(0, maxLength).trim()}...`;
+}
+
+function formatPrice(price) {
+  return Number(price || 0).toLocaleString('en-IN');
+}
+
+function renderStars(rating) {
+  const rounded = Math.max(0, Math.min(5, Math.round(rating || 0)));
+  const full = '\u2605'.repeat(rounded);
+  const empty = '\u2606'.repeat(5 - rounded);
+  return full + empty;
+}
+
+function getProductImageUrl(product) {
+  const current = (product && product.imageUrl ? String(product.imageUrl) : '').trim();
+  const isLegacyPlaceholder = !current || /picsum\.photos/i.test(current);
+
+  if (!isLegacyPlaceholder) return current;
+  if (product && PRODUCT_IMAGE_FALLBACKS[product.name]) return PRODUCT_IMAGE_FALLBACKS[product.name];
+  if (product && CATEGORY_IMAGE_FALLBACKS[product.category]) return CATEGORY_IMAGE_FALLBACKS[product.category];
+  return 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=1200&q=80';
+}
+
+function sortProducts(products, sortBy) {
+  const list = [...products];
+  if (sortBy === 'price-asc') return list.sort((a, b) => Number(a.price || 0) - Number(b.price || 0));
+  if (sortBy === 'price-desc') return list.sort((a, b) => Number(b.price || 0) - Number(a.price || 0));
+  if (sortBy === 'rating-desc') return list.sort((a, b) => Number(b.rating || 0) - Number(a.rating || 0));
+  return list;
+}
+
+function productCardTemplate(product) {
+  return `
+    <a class="product-card" href="product.html?id=${encodeURIComponent(product._id)}">
+      <img class="product-card-image" src="${escapeAttr(getProductImageUrl(product))}" alt="${escapeAttr(product.name)}" loading="lazy" />
+      <div class="product-card-body">
+        <span class="product-card-category">${escapeHtml(product.category || 'General')}</span>
+        <h3 class="product-card-name">${escapeHtml(product.name || 'Unnamed Product')}</h3>
+        <p class="product-card-desc">${escapeHtml(truncate(product.description || 'No description available.', 96))}</p>
+        <div class="product-card-footer">
+          <span class="product-price">${formatPrice(product.price)}</span>
+          <span class="rating-badge">${escapeHtml(String(product.rating || 0))} \u2605</span>
+        </div>
+      </div>
+    </a>
+  `;
+}
+
 function populateCategoryFilter(selectEl) {
   if (!selectEl) return;
   CATEGORIES.forEach((cat) => {
@@ -112,20 +121,70 @@ function populateCategoryFilter(selectEl) {
   });
 }
 
-/** Fetches products from the API given search/category params and renders them. */
-async function loadProducts(params = {}) {
+function readFiltersFromUrl() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const sort = SORT_OPTIONS.includes(urlParams.get('sort')) ? urlParams.get('sort') : 'relevance';
+  return {
+    search: (urlParams.get('search') || '').trim(),
+    category: (urlParams.get('category') || '').trim(),
+    sort
+  };
+}
+
+function syncFiltersToUrl({ search, category, sort }) {
+  const params = new URLSearchParams();
+  if (search) params.set('search', search);
+  if (category) params.set('category', category);
+  if (sort && sort !== 'relevance') params.set('sort', sort);
+  const next = params.toString();
+  const path = `${window.location.pathname}${next ? `?${next}` : ''}`;
+  window.history.replaceState({}, '', path);
+}
+
+function renderResultsMeta(productsCount, filters) {
+  const countEl = document.getElementById('results-count');
+  const filterSummary = document.getElementById('active-filter-summary');
+  if (countEl) {
+    countEl.textContent = `${productsCount} result${productsCount === 1 ? '' : 's'} found`;
+  }
+
+  if (!filterSummary) return;
+  const chips = [];
+  if (filters.search) chips.push(`Search: ${filters.search}`);
+  if (filters.category) chips.push(`Category: ${filters.category}`);
+  if (filters.sort && filters.sort !== 'relevance') chips.push(`Sort: ${filters.sort.replace('-', ' ')}`);
+
+  if (chips.length === 0) {
+    filterSummary.innerHTML = '<span class="filter-pill">Showing all products</span>';
+    return;
+  }
+
+  filterSummary.innerHTML = chips.map((item) => `<span class="filter-pill">${escapeHtml(item)}</span>`).join('');
+}
+
+async function loadProducts(filters = {}) {
   const grid = document.getElementById('product-grid');
   if (!grid) return;
+
+  const requestId = ++listingRequestId;
+  const applied = {
+    search: (filters.search || '').trim(),
+    category: (filters.category || '').trim(),
+    sort: SORT_OPTIONS.includes(filters.sort) ? filters.sort : 'relevance'
+  };
 
   grid.innerHTML = '<div class="loading-state">Loading products...</div>';
 
   const query = new URLSearchParams();
-  if (params.search) query.set('search', params.search);
-  if (params.category) query.set('category', params.category);
+  if (applied.search) query.set('search', applied.search);
+  if (applied.category) query.set('category', applied.category);
 
   try {
-    const data = await api.get(`/products${query.toString() ? '?' + query.toString() : ''}`);
-    const products = data.products || [];
+    const data = await api.get(`/products${query.toString() ? `?${query.toString()}` : ''}`);
+    if (requestId !== listingRequestId) return;
+
+    const products = sortProducts(data.products || [], applied.sort);
+    renderResultsMeta(products.length, applied);
 
     if (products.length === 0) {
       grid.innerHTML = '<div class="empty-state">No products found. Try a different search or category.</div>';
@@ -133,39 +192,53 @@ async function loadProducts(params = {}) {
     }
 
     grid.innerHTML = products.map(productCardTemplate).join('');
+    grid.querySelectorAll('.product-card').forEach((card, i) => {
+      card.style.setProperty('--delay', `${i * 45}ms`);
+    });
+    syncFiltersToUrl(applied);
   } catch (err) {
+    if (requestId !== listingRequestId) return;
     grid.innerHTML = `<div class="error-state">${escapeHtml(err.message || 'Failed to load products.')}</div>`;
   }
 }
 
-/** Wires up the search box, category filter, and form on index.html. */
 function initProductListing() {
   const grid = document.getElementById('product-grid');
-  if (!grid) return; // Not on the listing page.
+  if (!grid) return;
 
   const searchInput = document.getElementById('search-input');
   const categorySelect = document.getElementById('category-select');
+  const sortSelect = document.getElementById('sort-select');
   const filterForm = document.getElementById('filter-form');
   const clearBtn = document.getElementById('clear-filters-btn');
 
   populateCategoryFilter(categorySelect);
 
-  // Read initial state from the URL so links/bookmarks with query params work.
-  const urlParams = new URLSearchParams(window.location.search);
-  const initialSearch = urlParams.get('search') || '';
-  const initialCategory = urlParams.get('category') || '';
+  const initial = readFiltersFromUrl();
+  if (searchInput) searchInput.value = initial.search;
+  if (categorySelect) categorySelect.value = initial.category;
+  if (sortSelect) sortSelect.value = initial.sort;
 
-  if (searchInput) searchInput.value = initialSearch;
-  if (categorySelect) categorySelect.value = initialCategory;
-
-  loadProducts({ search: initialSearch, category: initialCategory });
+  loadProducts(initial);
 
   if (filterForm) {
-    filterForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const search = searchInput ? searchInput.value.trim() : '';
-      const category = categorySelect ? categorySelect.value : '';
-      loadProducts({ search, category });
+    filterForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      loadProducts({
+        search: searchInput ? searchInput.value.trim() : '',
+        category: categorySelect ? categorySelect.value : '',
+        sort: sortSelect ? sortSelect.value : 'relevance'
+      });
+    });
+  }
+
+  if (sortSelect) {
+    sortSelect.addEventListener('change', () => {
+      loadProducts({
+        search: searchInput ? searchInput.value.trim() : '',
+        category: categorySelect ? categorySelect.value : '',
+        sort: sortSelect.value
+      });
     });
   }
 
@@ -173,15 +246,15 @@ function initProductListing() {
     clearBtn.addEventListener('click', () => {
       if (searchInput) searchInput.value = '';
       if (categorySelect) categorySelect.value = '';
-      loadProducts({});
+      if (sortSelect) sortSelect.value = 'relevance';
+      loadProducts({ search: '', category: '', sort: 'relevance' });
     });
   }
 }
 
-/** Renders the full product detail view on product.html. */
 async function loadProductDetail() {
   const container = document.getElementById('product-detail-container');
-  if (!container) return; // Not on the detail page.
+  if (!container) return;
 
   const urlParams = new URLSearchParams(window.location.search);
   const id = urlParams.get('id');
@@ -195,23 +268,23 @@ async function loadProductDetail() {
 
   try {
     const data = await api.get(`/products/${encodeURIComponent(id)}`);
-    const product = data.product;
-    const inStock = product.stock > 0;
+    const product = data.product || {};
+    const inStock = Number(product.stock || 0) > 0;
 
-    document.title = `${product.name} | Bazaario`;
+    document.title = `${product.name || 'Product'} | Bazaario`;
 
     container.innerHTML = `
       <div class="product-detail">
-        <img class="product-detail-image" src="${escapeAttr(getProductImageUrl(product))}" alt="${escapeAttr(product.name)}" />
+        <img class="product-detail-image" src="${escapeAttr(getProductImageUrl(product))}" alt="${escapeAttr(product.name || 'Product image')}" loading="eager" />
         <div class="product-detail-info">
-          <span class="product-detail-category">${escapeHtml(product.category)}</span>
-          <h1 class="product-detail-name">${escapeHtml(product.name)}</h1>
+          <span class="product-detail-category">${escapeHtml(product.category || 'General')}</span>
+          <h1 class="product-detail-name">${escapeHtml(product.name || 'Unnamed Product')}</h1>
           <div class="product-detail-price-row">
             <span class="product-detail-price">${formatPrice(product.price)}</span>
             <span class="stars" title="${escapeAttr(String(product.rating || 0))} out of 5">${renderStars(product.rating)}</span>
             <span>(${escapeHtml(String(product.rating || 0))} / 5)</span>
           </div>
-          <p class="product-detail-desc">${escapeHtml(product.description)}</p>
+          <p class="product-detail-desc">${escapeHtml(product.description || 'No description available for this product.')}</p>
           <div class="detail-meta">
             <div class="detail-meta-item">
               <div class="label">Seller</div>
@@ -223,7 +296,7 @@ async function loadProductDetail() {
             </div>
             <div class="detail-meta-item">
               <div class="label">Category</div>
-              <div class="value">${escapeHtml(product.category)}</div>
+              <div class="value">${escapeHtml(product.category || 'General')}</div>
             </div>
           </div>
         </div>

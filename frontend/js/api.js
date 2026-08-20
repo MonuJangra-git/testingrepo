@@ -6,6 +6,7 @@
  */
 
 const API_BASE = '/api';
+const REQUEST_TIMEOUT_MS = 12000;
 
 /**
  * Performs a fetch call against the API and returns parsed JSON.
@@ -13,12 +14,16 @@ const API_BASE = '/api';
  * can catch it and show it in the UI.
  */
 async function apiRequest(path, options = {}) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
   const finalOptions = {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
       ...(options.headers || {})
     },
+    signal: controller.signal,
     ...options
   };
 
@@ -26,13 +31,23 @@ async function apiRequest(path, options = {}) {
   try {
     response = await fetch(`${API_BASE}${path}`, finalOptions);
   } catch (networkErr) {
+    if (networkErr && networkErr.name === 'AbortError') {
+      throw new Error('Request timed out. Please retry.');
+    }
     throw new Error('Could not reach the server. Please check your connection and try again.');
+  } finally {
+    clearTimeout(timeout);
   }
 
   let data = null;
   const contentType = response.headers.get('content-type') || '';
   if (contentType.includes('application/json')) {
     data = await response.json().catch(() => null);
+  } else {
+    const text = await response.text().catch(() => '');
+    if (text) {
+      data = { error: text };
+    }
   }
 
   if (!response.ok) {
