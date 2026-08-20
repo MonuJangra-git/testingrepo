@@ -271,7 +271,7 @@ async function loadProductDetail() {
     const product = data.product || {};
     const inStock = Number(product.stock || 0) > 0;
 
-    document.title = `${product.name || 'Product'} | Bazaario`;
+    document.title = `${product.name || 'Product'} | OKShop`;
 
     container.innerHTML = `
       <div class="product-detail">
@@ -288,7 +288,7 @@ async function loadProductDetail() {
           <div class="detail-meta">
             <div class="detail-meta-item">
               <div class="label">Seller</div>
-              <div class="value">${escapeHtml(product.seller || 'Bazaario Marketplace')}</div>
+              <div class="value">${escapeHtml(product.seller || 'OKShop Marketplace')}</div>
             </div>
             <div class="detail-meta-item">
               <div class="label">Availability</div>
