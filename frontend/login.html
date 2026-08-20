@@ -4,52 +4,183 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Log In | Bazaario</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<body>
+
+<body class="auth-page">
 
   <nav class="navbar">
-    <div class="container">
+    <div class="container navbar-inner">
       <a href="index.html" class="navbar-brand">Bazaario<span class="brand-dot">.</span></a>
+
       <ul class="navbar-links" id="nav-links">
         <li><a href="index.html">Home</a></li>
         <li id="nav-dynamic"></li>
+        <li class="nav-cta">
+          <a class="btn-secondary" href="register.html">Create account</a>
+        </li>
       </ul>
     </div>
   </nav>
 
-  <main>
+  <main class="auth-main">
     <div class="container">
-      <div class="auth-wrapper">
-        <h1>Welcome back</h1>
-        <p class="auth-subtitle">Log in to view your profile.</p>
+      <section class="auth-shell">
+        <!-- Left / Marketing side -->
+        <aside class="auth-side">
+          <div class="auth-side-content">
+            <span class="auth-badge">Secure sign-in</span>
+            <h1 class="auth-heading">Welcome back to Bazaario</h1>
+            <p class="auth-lead">
+              Sign in to manage your profile, track activity, and continue where you left off.
+            </p>
 
-        <div class="alert" id="form-alert"></div>
+            <ul class="auth-benefits" aria-label="Benefits">
+              <li>
+                <strong>Fast checkout-ready</strong>
+                <span>Save your preferences for a smoother experience.</span>
+              </li>
+              <li>
+                <strong>Private & secure</strong>
+                <span>Your data is protected with modern best practices.</span>
+              </li>
+              <li>
+                <strong>Personalized experience</strong>
+                <span>See content tailored to your interests.</span>
+              </li>
+            </ul>
 
-        <form id="login-form" novalidate>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" autocomplete="email" required />
+            <div class="auth-trust">
+              <div class="trust-item">
+                <span class="trust-kpi">99.9%</span>
+                <span class="trust-label">Uptime</span>
+              </div>
+              <div class="trust-item">
+                <span class="trust-kpi">24/7</span>
+                <span class="trust-label">Monitoring</span>
+              </div>
+              <div class="trust-item">
+                <span class="trust-kpi">SSL</span>
+                <span class="trust-label">Encrypted</span>
+              </div>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" autocomplete="current-password" required />
-          </div>
-          <button type="submit" class="btn-primary" id="login-submit-btn">Log In</button>
-        </form>
+        </aside>
 
-        <p class="auth-footer-note">Don't have an account? <a href="register.html">Register here</a></p>
-      </div>
+        <!-- Right / Form card -->
+        <section class="auth-card" aria-label="Login form">
+          <header class="auth-card-header">
+            <h2>Log in</h2>
+            <p>Use your email and password to continue.</p>
+          </header>
+
+          <!-- Alert area used by your JS -->
+          <div class="alert" id="form-alert" role="status" aria-live="polite"></div>
+
+          <div class="auth-actions">
+            <button type="button" class="btn-social" aria-label="Continue with Google (demo button)">
+              <span class="btn-social-icon" aria-hidden="true">G</span>
+              Continue with Google
+            </button>
+            <button type="button" class="btn-social" aria-label="Continue with GitHub (demo button)">
+              <span class="btn-social-icon" aria-hidden="true">GH</span>
+              Continue with GitHub
+            </button>
+
+            <div class="auth-divider" role="separator" aria-label="Or sign in with email">
+              <span>or</span>
+            </div>
+          </div>
+
+          <form id="login-form" class="auth-form" novalidate>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                autocomplete="email"
+                placeholder="you@example.com"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="password">Password</label>
+
+              <div class="input-with-action">
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  autocomplete="current-password"
+                  placeholder="Enter your password"
+                  required
+                />
+                <button
+                  type="button"
+                  class="input-action"
+                  id="toggle-password"
+                  aria-label="Show password"
+                >
+                  Show
+                </button>
+              </div>
+
+              <div class="form-row">
+                <label class="checkbox">
+                  <input type="checkbox" name="remember" />
+                  <span>Remember me</span>
+                </label>
+
+                <a class="link" href="forgot-password.html">Forgot password?</a>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary btn-block" id="login-submit-btn">
+              Log In
+            </button>
+
+            <p class="auth-footer-note">
+              Don’t have an account? <a class="link" href="register.html">Create one</a>
+            </p>
+          </form>
+
+          <footer class="auth-card-footer">
+            <small>
+              By continuing, you agree to our <a class="link" href="terms.html">Terms</a> and
+              <a class="link" href="privacy.html">Privacy Policy</a>.
+            </small>
+          </footer>
+        </section>
+      </section>
     </div>
   </main>
 
   <footer class="site-footer">
-    &copy; 2026 Bazaario. Built for learning purposes only -- not a real store.
+    &copy; 2026 Bazaario. Built for learning purposes only — not a real store.
   </footer>
 
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
+
+  <!-- Small UI enhancement (doesn't affect your auth.js logic) -->
+  <script>
+    (function () {
+      const btn = document.getElementById("toggle-password");
+      const input = document.getElementById("password");
+      if (!btn || !input) return;
+
+      btn.addEventListener("click", () => {
+        const isHidden = input.type === "password";
+        input.type = isHidden ? "text" : "password";
+        btn.textContent = isHidden ? "Hide" : "Show";
+        btn.setAttribute("aria-label", isHidden ? "Hide password" : "Show password");
+      });
+    })();
+  </script>
 </body>
 </html>
