@@ -3,54 +3,101 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Register | Bazaario</title>
+  <title>Create Account | Bazaario Marketplace</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/css_for_index.css" />
 </head>
-<body>
+<body class="auth-page">
 
   <nav class="navbar">
-    <div class="container">
+    <div class="container navbar-inner">
       <a href="index.html" class="navbar-brand">Bazaario<span class="brand-dot">.</span></a>
       <ul class="navbar-links" id="nav-links">
-        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html">Marketplace</a></li>
         <li id="nav-dynamic"></li>
+        <li class="nav-cta">
+          <a class="btn-secondary" href="login.html">Already a member</a>
+        </li>
       </ul>
     </div>
   </nav>
 
-  <main>
+  <main class="auth-main">
     <div class="container">
-      <div class="auth-wrapper">
-        <h1>Create your account</h1>
-        <p class="auth-subtitle">Join Bazaario to save your profile.</p>
-
-        <div class="alert" id="form-alert"></div>
-
-        <form id="register-form" novalidate>
-          <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" autocomplete="username" minlength="3" maxlength="30" required />
+      <section class="auth-shell">
+        <aside class="auth-side">
+          <div class="auth-side-content">
+            <span class="auth-badge">Build your buyer profile</span>
+            <h1 class="auth-heading">Create your Bazaario account</h1>
+            <p class="auth-lead">
+              Join thousands of users discovering quality products with transparent ratings and cleaner comparisons.
+            </p>
+            <ul class="auth-benefits" aria-label="Membership benefits">
+              <li>
+                <strong>Personalized browsing</strong>
+                <span>Get category-first recommendations based on your choices.</span>
+              </li>
+              <li>
+                <strong>Saved preferences</strong>
+                <span>Keep your account setup and return faster every time.</span>
+              </li>
+              <li>
+                <strong>Secure by design</strong>
+                <span>Modern API-backed auth flow with protected routes.</span>
+              </li>
+            </ul>
           </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" autocomplete="email" required />
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" autocomplete="new-password" minlength="6" required />
-          </div>
-          <button type="submit" class="btn-primary" id="register-submit-btn">Create Account</button>
-        </form>
+        </aside>
 
-        <p class="auth-footer-note">Already have an account? <a href="login.html">Log in here</a></p>
-      </div>
+        <section class="auth-card" aria-label="Registration form">
+          <header class="auth-card-header">
+            <h2>Create account</h2>
+            <p>Set up your profile in less than a minute.</p>
+          </header>
+
+          <div class="alert" id="form-alert" role="status" aria-live="polite"></div>
+
+          <form id="register-form" class="auth-form" novalidate>
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" id="username" name="username" autocomplete="username" minlength="3" maxlength="30" placeholder="Enter your display name" required />
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" autocomplete="email" placeholder="you@example.com" required />
+            </div>
+
+            <div class="form-group">
+              <label for="password">Password</label>
+              <div class="input-with-action">
+                <input type="password" id="password" name="password" autocomplete="new-password" minlength="6" placeholder="At least 6 characters" required />
+                <button type="button" class="input-action" data-toggle-password="password" aria-label="Show password">Show</button>
+              </div>
+              <small class="field-hint" id="password-strength">Use at least 6 characters.</small>
+            </div>
+
+            <div class="form-group">
+              <label for="confirm-password">Confirm password</label>
+              <div class="input-with-action">
+                <input type="password" id="confirm-password" name="confirm-password" autocomplete="new-password" minlength="6" placeholder="Re-enter your password" required />
+                <button type="button" class="input-action" data-toggle-password="confirm-password" aria-label="Show password">Show</button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary btn-block" id="register-submit-btn">Create Account</button>
+
+            <p class="auth-footer-note">Already have an account? <a class="link" href="login.html">Log in here</a></p>
+          </form>
+        </section>
+      </section>
     </div>
   </main>
 
   <footer class="site-footer">
-    &copy; 2026 Bazaario. Built for learning purposes only -- not a real store.
+    <p>&copy; 2026 Bazaario Marketplace. Built for modern commerce demos.</p>
   </footer>
 
   <script src="js/api.js"></script>

@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Log In | Bazaario</title>
+  <title>Sign In | Bazaario Marketplace</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/css_for_index.css" />
 </head>
 
@@ -17,7 +18,7 @@
       <a href="index.html" class="navbar-brand">Bazaario<span class="brand-dot">.</span></a>
 
       <ul class="navbar-links" id="nav-links">
-        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html">Marketplace</a></li>
         <li id="nav-dynamic"></li>
         <li class="nav-cta">
           <a class="btn-secondary" href="register.html">Create account</a>
@@ -35,21 +36,21 @@
             <span class="auth-badge">Secure sign-in</span>
             <h1 class="auth-heading">Welcome back to Bazaario</h1>
             <p class="auth-lead">
-              Sign in to manage your profile, track activity, and continue where you left off.
+              Sign in to continue shopping smarter with saved picks, streamlined checkout, and a cleaner dashboard.
             </p>
 
             <ul class="auth-benefits" aria-label="Benefits">
               <li>
-                <strong>Fast checkout-ready</strong>
-                <span>Save your preferences for a smoother experience.</span>
+                <strong>Faster discovery</strong>
+                <span>Keep your filters and preferences ready for your next visit.</span>
               </li>
               <li>
-                <strong>Private & secure</strong>
-                <span>Your data is protected with modern best practices.</span>
+                <strong>Private and secure</strong>
+                <span>Auth flow is protected with session-aware API security.</span>
               </li>
               <li>
-                <strong>Personalized experience</strong>
-                <span>See content tailored to your interests.</span>
+                <strong>Better recommendations</strong>
+                <span>See products aligned to your categories and interests.</span>
               </li>
             </ul>
 
@@ -63,8 +64,8 @@
                 <span class="trust-label">Monitoring</span>
               </div>
               <div class="trust-item">
-                <span class="trust-kpi">SSL</span>
-                <span class="trust-label">Encrypted</span>
+                <span class="trust-kpi">SOC2</span>
+                <span class="trust-label">Aligned</span>
               </div>
             </div>
           </div>
@@ -73,7 +74,7 @@
         <!-- Right / Form card -->
         <section class="auth-card" aria-label="Login form">
           <header class="auth-card-header">
-            <h2>Log in</h2>
+            <h2>Sign in</h2>
             <p>Use your email and password to continue.</p>
           </header>
 
@@ -123,7 +124,7 @@
                 <button
                   type="button"
                   class="input-action"
-                  id="toggle-password"
+                  data-toggle-password="password"
                   aria-label="Show password"
                 >
                   Show
@@ -136,7 +137,7 @@
                   <span>Remember me</span>
                 </label>
 
-                <a class="link" href="forgot-password.html">Forgot password?</a>
+                <a class="link" href="#">Forgot password?</a>
               </div>
             </div>
 
@@ -145,14 +146,14 @@
             </button>
 
             <p class="auth-footer-note">
-              Don’t have an account? <a class="link" href="register.html">Create one</a>
+              Do not have an account? <a class="link" href="register.html">Create one</a>
             </p>
           </form>
 
           <footer class="auth-card-footer">
             <small>
-              By continuing, you agree to our <a class="link" href="terms.html">Terms</a> and
-              <a class="link" href="privacy.html">Privacy Policy</a>.
+              By continuing, you agree to our <a class="link" href="#">Terms</a> and
+              <a class="link" href="#">Privacy Policy</a>.
             </small>
           </footer>
         </section>
@@ -161,26 +162,11 @@
   </main>
 
   <footer class="site-footer">
-    &copy; 2026 Bazaario. Built for learning purposes only — not a real store.
+    <p>&copy; 2026 Bazaario Marketplace. Built for modern commerce demos.</p>
   </footer>
 
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
 
-  <!-- Small UI enhancement (doesn't affect your auth.js logic) -->
-  <script>
-    (function () {
-      const btn = document.getElementById("toggle-password");
-      const input = document.getElementById("password");
-      if (!btn || !input) return;
-
-      btn.addEventListener("click", () => {
-        const isHidden = input.type === "password";
-        input.type = isHidden ? "text" : "password";
-        btn.textContent = isHidden ? "Hide" : "Show";
-        btn.setAttribute("aria-label", isHidden ? "Hide password" : "Show password");
-      });
-    })();
-  </script>
 </body>
 </html>

@@ -3,18 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Product Details | Bazaario</title>
+  <title>Product Details | Bazaario Marketplace</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
   <nav class="navbar">
-    <div class="container">
+    <div class="container nav-inner">
       <a href="index.html" class="navbar-brand">Bazaario<span class="brand-dot">.</span></a>
       <ul class="navbar-links" id="nav-links">
-        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html">Marketplace</a></li>
         <li id="nav-dynamic"></li>
       </ul>
     </div>
@@ -22,15 +23,19 @@
 
   <main>
     <div class="container">
-      <a href="index.html" class="back-link">&larr; Back to products</a>
-      <div id="product-detail-container">
+      <section class="product-page-head">
+        <a href="index.html" class="back-link">&larr; Back to products</a>
+        <h1>Product insight</h1>
+      </section>
+
+      <div id="product-detail-container" class="product-detail-wrap">
         <div class="loading-state">Loading product...</div>
       </div>
     </div>
   </main>
 
   <footer class="site-footer">
-    &copy; 2026 Bazaario. Built for learning purposes only -- not a real store.
+    <p>&copy; 2026 Bazaario Marketplace. Built for modern commerce demos.</p>
   </footer>
 
   <script src="js/api.js"></script>

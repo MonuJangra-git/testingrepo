@@ -3,18 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bazaario V 2.0| Shop Everything</title>
+  <title>Bazaario Marketplace | Discover Smart Deals</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
   <nav class="navbar">
-    <div class="container">
-      <a href="index.html" class="navbar-brand">Bazaario V 2.0<span class="brand-dot">.</span></a>
+    <div class="container nav-inner">
+      <a href="index.html" class="navbar-brand">Bazaario<span class="brand-dot">.</span></a>
       <ul class="navbar-links" id="nav-links">
-        <li><a href="index.html">Home</a></li>
+        <li><a class="is-active" href="index.html">Marketplace</a></li>
+        <li><a href="product.html">Featured</a></li>
         <li id="nav-dynamic"></li>
       </ul>
     </div>
@@ -22,28 +24,80 @@
 
   <main>
     <div class="container">
-      <div class="page-header">
-        <h1>Discover great deals by MJ enterprises</h1>
-        <p>EVERYTHING IS POSSIBLE FOR MONU JANGRA SO DO NOT TAKE TENSION RELATED TO WEBSITE AND SERVERS </p>
-      </div>
+      <section class="market-hero">
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">Smart shopping, human pricing</p>
+            <h1>Find trend-right products without hunting for hours.</h1>
+            <p class="hero-lead">Search faster, filter better, and compare top-rated products in one clean marketplace experience.</p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#product-grid">Start Exploring</a>
+              <a class="btn btn-ghost" href="register.html">Create Account</a>
+            </div>
+          </div>
+          <div class="hero-panel" aria-label="Marketplace highlights">
+            <div class="stat-card">
+              <span class="stat-value">10k+</span>
+              <span class="stat-label">Catalog items scanned</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-value">4.8/5</span>
+              <span class="stat-label">Average buyer rating</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-value">24h</span>
+              <span class="stat-label">Daily price updates</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
-      <form class="toolbar" id="filter-form">
-        <input type="text" id="search-input" placeholder="Search products by name or description..." />
-        <select id="category-select">
-          <option value="">All Categories</option>
-        </select>
-        <button type="submit">Search</button>
-        <button type="button" class="secondary" id="clear-filters-btn">Clear</button>
-      </form>
+      <section class="catalog-section">
+        <div class="section-head">
+          <h2>Browse products</h2>
+          <p id="results-count">Loading products...</p>
+        </div>
 
-      <div class="product-grid" id="product-grid">
-        <div class="loading-state">Loading products...</div>
-      </div>
+        <form class="toolbar" id="filter-form">
+          <div class="field-group field-grow">
+            <label for="search-input">Search</label>
+            <input type="text" id="search-input" placeholder="Search by product name or description" autocomplete="off" />
+          </div>
+
+          <div class="field-group">
+            <label for="category-select">Category</label>
+            <select id="category-select">
+              <option value="">All categories</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label for="sort-select">Sort by</label>
+            <select id="sort-select">
+              <option value="relevance">Relevance</option>
+              <option value="price-asc">Price: low to high</option>
+              <option value="price-desc">Price: high to low</option>
+              <option value="rating-desc">Highest rating</option>
+            </select>
+          </div>
+
+          <div class="toolbar-buttons">
+            <button type="submit" class="btn btn-primary">Apply</button>
+            <button type="button" class="btn btn-ghost" id="clear-filters-btn">Reset</button>
+          </div>
+        </form>
+
+        <div class="active-filters" id="active-filter-summary" aria-live="polite"></div>
+
+        <div class="product-grid" id="product-grid">
+          <div class="loading-state">Loading products...</div>
+        </div>
+      </section>
     </div>
   </main>
 
   <footer class="site-footer">
-    &copy; 2026 Bazaario V 2.0. Built for learning purposes only -- not a real store.
+    <p>&copy; 2026 Bazaario Marketplace. Built for modern commerce demos.</p>
   </footer>
 
   <script src="js/api.js"></script>
